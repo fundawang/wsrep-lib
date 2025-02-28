@@ -92,23 +92,14 @@ void wsrep::provider_options::option::update_value(
 
 wsrep::provider_options::option::~option() {}
 
-wsrep::provider_options::provider_options(wsrep::provider& provider)
-    : provider_(provider)
-    , options_()
+wsrep::provider_options::provider_options()
+    : options_()
 {
 }
 
 enum wsrep::provider::status wsrep::provider_options::initial_options()
 {
-    options_.clear();
-    if (config_service_v1_fetch(provider_, this))
-    {
-        return wsrep::provider::error_not_implemented;
-    }
-    else
-    {
-        return wsrep::provider::success;
-    }
+  return wsrep::provider::error_not_implemented;
 }
 
 const wsrep::provider_options::option*
@@ -123,7 +114,7 @@ wsrep::provider_options::get_option(const std::string& name) const
 }
 
 enum wsrep::provider::status wsrep::provider_options::set(
-    const std::string& name,
+    wsrep::provider& provider, const std::string& name,
     std::unique_ptr<wsrep::provider_options::option_value> value)
 {
     auto option(options_.find(name));
@@ -132,7 +123,7 @@ enum wsrep::provider::status wsrep::provider_options::set(
         return not_found_error;
     }
     provider_options_sep sep;
-    auto ret(provider_.options(std::string(option->second->real_name())
+    auto ret(provider.options(std::string(option->second->real_name())
                                + sep.key_value + value->as_string()
                                + sep.param));
     if (ret == provider::success)

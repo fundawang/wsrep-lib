@@ -30,12 +30,14 @@ std::unique_ptr<wsrep::provider> wsrep::provider::make_provider(
     wsrep::server_state& server_state,
     const std::string& provider_spec,
     const std::function<std::string()>& provider_options_cb,
+    provider_options& provider_options,
     const wsrep::provider::services& services)
 {
     try
     {
         return std::unique_ptr<wsrep::provider>(new wsrep::wsrep_provider_v26(
-            server_state, provider_spec, provider_options_cb, services));
+            server_state, provider_spec, provider_options_cb, provider_options,
+            services));
     }
     catch (const wsrep::runtime_error& e)
     {

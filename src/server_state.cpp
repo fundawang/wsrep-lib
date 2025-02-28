@@ -505,8 +505,8 @@ int wsrep::server_state::load_provider(
 {
     wsrep::log_info() << "Loading provider " << provider_spec
                       << " initial position: " << initial_position_;
-    provider_
-        = provider_factory_(*this, provider_spec, provider_options_cb, services);
+    provider_ = provider_factory_(*this, provider_spec, provider_options_cb,
+                                  provider_options_, services);
     return (provider_ ? 0 : 1);
 }
 

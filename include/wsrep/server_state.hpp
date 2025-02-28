@@ -91,6 +91,7 @@
 #include "provider.hpp"
 #include "compiler.hpp"
 #include "xid.hpp"
+#include "provider_options.hpp"
 
 #include <memory>
 #include <deque>
@@ -354,6 +355,11 @@ namespace wsrep
                 throw wsrep::runtime_error("provider not loaded");
             }
             return *provider_;
+        }
+
+        wsrep::provider_options* provider_options()
+        {
+            return &provider_options_;
         }
 
         /**
@@ -664,6 +670,7 @@ namespace wsrep
             , streaming_appliers_recovered_()
             , provider_()
             , provider_factory_(wsrep::provider::make_provider)
+            , provider_options_()
             , name_(name)
             , id_(wsrep::id::undefined())
             , incoming_address_(incoming_address)
@@ -746,6 +753,7 @@ namespace wsrep
         bool streaming_appliers_recovered_;
         std::unique_ptr<wsrep::provider> provider_;
         provider_factory_func provider_factory_;
+        wsrep::provider_options provider_options_;
         std::string name_;
         wsrep::id id_;
         std::string incoming_address_;

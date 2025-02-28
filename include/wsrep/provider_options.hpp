@@ -214,7 +214,7 @@ namespace wsrep
             int flags_;
         };
 
-        provider_options(wsrep::provider&);
+        provider_options();
         provider_options(const provider_options&) = delete;
         provider_options& operator=(const provider_options&) = delete;
 
@@ -224,6 +224,7 @@ namespace wsrep
          * Individual options should be accessed through set()/get().
          *
          * @return Provider status code.
+         * @deprecated Provider options are now loaded in provider ctor
          */
         enum wsrep::provider::status initial_options();
 
@@ -241,8 +242,9 @@ namespace wsrep
          * @return wsrep::provider::error_size_exceeded if memory could
          *         not be allocated for the new value.
          */
-        enum wsrep::provider::status set(const std::string& name,
-                                         std::unique_ptr<option_value> value);
+        enum wsrep::provider::status set(wsrep::provider& provider,
+                                          const std::string& name,
+                                          std::unique_ptr<option_value> value);
 
         /**
          * Create a new option with default value.
@@ -255,7 +257,6 @@ namespace wsrep
         void for_each(const std::function<void(option*)>& fn);
 
     private:
-        provider& provider_;
         using options_map = std::map<std::string, std::unique_ptr<option>>;
         options_map options_;
     };
